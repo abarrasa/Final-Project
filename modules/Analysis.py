@@ -1,12 +1,13 @@
 from operator import ne
-import geo_calculations as geo
+import modules.geo_calculations as geo
 import pandas as pd
 from geopy.geocoders import Nominatim 
 from datetime import datetime
 import folium
+from prophet import Prophet
 
-dia_hoy=datetime.today().strftime('%d-%m-%Y')
-df_new = pd.read_excel(f"./Final-Project/df_diario {dia_hoy}.xlsx")
+#dia_hoy=datetime.today().strftime('%d-%m-%Y')
+#df_new = pd.read_excel(f"./df_diario {dia_hoy}.xlsx")
 
 
 def mercator_gas(df_new):
@@ -42,9 +43,8 @@ def statistical_quartiles(dataset, column, percentile):
         index = int(len(data))-1  
         return data[index]
 
-def colores():
+def colores(df_new):
     df_colores = df_new.iloc[:,[7,10]]
-    print(df_colores)
     #df_colores['Precio gasolina 95 E5'].replace('No disponible', pd.NA, inplace=True)
     df_colores['Precio gasolina 95 E5'] = df_colores['Precio gasolina 95 E5'].apply(lambda x: x.replace(',','.'))
     df_colores['Precio gasóleo A'] = df_colores['Precio gasóleo A'].apply(lambda x: x.replace(',','.'))
@@ -71,14 +71,13 @@ def ubi_gasolinera(df_new):
             <div style="font-family: arial; color: black">
             <h><b> {df_new.iloc[i]['Rótulo']}</h></b>
             <p>Prices:</p>
-                <li> Gasolina 95:{df_new.iloc[i]['Precio gasolina 95 E5']} €</li>
-                <li> Diésel:{df_new.iloc[i]['Precio gasóleo A']} €</li>
-            <p><b>Dirección:</b></p>
+                <li> Gasoline 95:{df_new.iloc[i]['Precio gasolina 95 E5']} €</li>
+                <li> Diesel:{df_new.iloc[i]['Precio gasóleo A']} €</li>
+            <p><b>Address:</b></p>
             <p>{df_new.iloc[i]['Dirección']}</p>
             </ul> 
             </p>
             <img src="my_plot_name.png">
-            <p>And that's a <a href="https://www.python-graph-gallery.com">link</a></p></div>
             """
         
         iframe = folium.IFrame(html=html, width=200, height=200)
@@ -103,12 +102,6 @@ def ubi_gasolinera(df_new):
                 popup=popup,
                 icon=folium.Icon(color="red",  icon="ok-sign"),
             ).add_to(mapa_loop)
-    mapa_loop.save('./modules/map.html')
-    return mapa_loop
-
-
-def ubi_actual(df_new):
-    mapa_loop = folium.Map(location=[40.546376,-3.638541], zoom_start=15)
     html=f"""
         <div style="font-family: times new roman; color: green">
         <h><b> Actualmente te encuentras aquí </b></h></div>
@@ -123,14 +116,33 @@ def ubi_actual(df_new):
     mapa_loop.save('./modules/map.html')
     return mapa_loop
 
-df_new = mercator_gas(df_new)
-print('sale_df_con_distance')
-df_new = colores()
-print('columna colores')
+def prediction(df_acum):
+    df_acum['Precio gasolina 95 E5'] = df_acum['Precio gasolina 95 E5'].apply(lambda x: x.replace(',','.'))
+    df_acum.drop(df_acum.loc[df_acum['Precio gasolina 95 E5']=='No disponible'].index, inplace=True)
+    df_acum['Precio gasolina 95 E5']=df_acum['Precio gasolina 95 E5'].astype('float64')
+    df_todas_gasolineras = df_acum.groupby(["Fecha de extracción"])["Precio gasolina 95 E5"].median()
+    df_prophet_espana=pd.DataFrame(df_todas_gasolineras).reset_index()
+    df_prophet_espana.columns = ['ds', 'y']
+    format_data = '%d-%m-%Y'
+    df_prophet_espana['ds']=df_prophet_espana['ds'].apply(lambda x: datetime.datetime.strptime(x,format_data))
+    my_model = Prophet(interval_width=0.8, daily_seasonality=False, yearly_seasonality=False)
+    my_model.fit(df_prophet_espana, iter=100)
+    future = my_model.make_future_dataframe(periods=7)
+    predict= my_model.predict(future)
+    predict[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].tail(9)
+    my_model.plot(predict, uncertainty=True)
+    my_model.plot_components(predict)
+    return my_model.plot(predict, uncertainty=True)
 
-mapa_loop = ubi_gasolinera(df_new)
-print('mapa gasolineras hecho')
-mapa_loop = ubi_actual(df_new)
-print('mapa ubi hecho')
+
+#df_new = mercator_gas(df_new)
+#print('sale_df_con_distance')
+#df_new = colores()
+#print('columna colores')
+
+#mapa_loop = ubi_gasolinera(df_new)
+#print('mapa gasolineras hecho')
+#mapa_loop = ubi_actual(df_new)
+#print('mapa ubi hecho')
 
 
