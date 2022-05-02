@@ -49,23 +49,30 @@ else:
             folium_static(ana.ubi_gasolinera(df_head))
         with col3:
             st.write("")
-
-
-        col1, col2, col3 = st.columns([1,4,2])
-        with col1: 
-            st.write("")  
+        
+        col1, col2 = st.columns([1,4]) 
+        with col1:
+            st.caption("### Want to know next week´s prices?") 
         with col2:
-            st.caption("## Want to know next week´s prices?") 
-        with col3:
+            st.write('')
+        
+        col1, col2 = st.columns([1,4]) 
+        with col1:
             graph=rep.prediction(df_definitivo)
             st.write(graph)
-
-        #if st.button('Predict!'):
+        with col2:
+            st.write('')
+            
+        #if st.button('Predict!'):    
             #run = 'yes'
         #else:
             #run = 'no'
-
+        
+        
         #if run == 'no':
             #st.write('')
         #else:
+            #graph=rep.prediction(df_definitivo)
+            #st.write(graph)
+
             
