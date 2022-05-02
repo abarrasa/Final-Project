@@ -14,7 +14,10 @@ from prophet import Prophet
 from fbprophet.plot import plot_plotly
 import plotly.offline as py
 
-#df_acum = pd.read_excel('./df_copia_seguridad01-05-2022.xlsx')
+
+#st.title('prediction')
+
+#df_acum = pd.read_excel("./df_copia_seguridad02-05-2022.xlsx")
 
 def prediction(df_acum):
     df_acum['Precio gasolina 95 E5'] = df_acum['Precio gasolina 95 E5'].apply(lambda x: x.replace(',','.'))
@@ -31,7 +34,9 @@ def prediction(df_acum):
     predict= my_model.predict(future)
     predict[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].tail(9)
     graph = my_model.plot(predict, uncertainty=True)
-    graph.savefig("aaa.jpg")
+    graph.savefig("prediction_prophet.jpg")
     my_model.plot_components(predict)
     return graph
 
+#graph=prediction(df_acum)
+#st.write(graph)

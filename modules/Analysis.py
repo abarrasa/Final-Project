@@ -10,9 +10,8 @@ from prophet import Prophet
 #df_new = pd.read_excel(f"./df_diario {dia_hoy}.xlsx")
 
 
-def mercator_gas(df_new):
+def mercator_gas(df_new, direccion_usuario):
     geolocator = Nominatim(user_agent="My-App")
-    direccion_usuario= input("Please, Enter your location: ")
     location = geolocator.geocode(direccion_usuario)
     df_new['Latitud'] = df_new['Latitud'].apply(lambda x: x.replace(',','.'))
     df_new['Longitud'] = df_new['Longitud'].apply(lambda x: x.replace(',','.'))

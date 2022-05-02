@@ -26,7 +26,8 @@ with col1:
 with col2:
     st.image('./images/gasolinera.jpeg',width=430)
 
-st.text_input("Please, enter your **location** here: *(e.g. Calle Augusto Figueroa, 67, Madrid)*") 
+
+direccion_usuario=st.text_input("Please, enter your **location** here: *(e.g. Calle Augusto Figueroa, 67, Madrid)*") 
 if st.button('Calculate!'):
     run = 'yes'
 else:
@@ -39,24 +40,25 @@ else:
         data = acq.api(URL)
         df_new = acq.generate_excel_today(data)
         df_definitivo = acq.generate_excel_accumulate(data)
-        df_head = ana.mercator_gas(df_new)
+        df_head = ana.mercator_gas(df_new, direccion_usuario)
         df_head = ana.colores(df_head)
         col1, col2, col3 = st.columns([1,4,2])
         with col1:
             st.write("")
         with col2:
             folium_static(ana.ubi_gasolinera(df_head))
-            graph=rep.prediction(df_definitivo)
-            
         with col3:
             st.write("")
+
+
         col1, col2, col3 = st.columns([1,4,2])
         with col1: 
             st.write("")  
         with col2:
             st.caption("## Want to know next week´s prices?") 
         with col3:
-            st.write("")
+            graph=rep.prediction(df_definitivo)
+            st.write(graph)
 
         #if st.button('Predict!'):
             #run = 'yes'
