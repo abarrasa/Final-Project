@@ -73,7 +73,7 @@ def ubi_gasolinera(df_new):
                 <li> Gasoline 95: {df_new.iloc[i]['Precio gasolina 95 E5']} €</li>
                 <li> Diesel: {df_new.iloc[i]['Precio gasóleo A']} €</li>
             <p><b>Address:</b></p>
-            <p>{df_new.iloc[i]['Dirección'].title}</p>
+            <p>{df_new.iloc[i]['Dirección'].title()}</p>
             """
         
         iframe = folium.IFrame(html=html, width=180, height=215)
@@ -112,23 +112,6 @@ def ubi_gasolinera(df_new):
     mapa_loop.save('./modules/map.html')
     return mapa_loop
 
-def prediction(df_acum):
-    df_acum['Precio gasolina 95 E5'] = df_acum['Precio gasolina 95 E5'].apply(lambda x: x.replace(',','.'))
-    df_acum.drop(df_acum.loc[df_acum['Precio gasolina 95 E5']=='No disponible'].index, inplace=True)
-    df_acum['Precio gasolina 95 E5']=df_acum['Precio gasolina 95 E5'].astype('float64')
-    df_todas_gasolineras = df_acum.groupby(["Fecha de extracción"])["Precio gasolina 95 E5"].median()
-    df_prophet_espana=pd.DataFrame(df_todas_gasolineras).reset_index()
-    df_prophet_espana.columns = ['ds', 'y']
-    format_data = '%d-%m-%Y'
-    df_prophet_espana['ds']=df_prophet_espana['ds'].apply(lambda x: datetime.datetime.strptime(x,format_data))
-    my_model = Prophet(interval_width=0.8, daily_seasonality=False, yearly_seasonality=False)
-    my_model.fit(df_prophet_espana, iter=100)
-    future = my_model.make_future_dataframe(periods=7)
-    predict= my_model.predict(future)
-    predict[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].tail(9)
-    my_model.plot(predict, uncertainty=True)
-    my_model.plot_components(predict)
-    return my_model.plot(predict, uncertainty=True)
 
 
 #df_new = mercator_gas(df_new)
