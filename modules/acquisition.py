@@ -1,12 +1,11 @@
 import pandas as pd
 import requests
 from datetime import datetime 
-from openpyxl.workbook import Workbook
+#from openpyxl.workbook import Workbook
 URL = 'https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/'
 
 
 def api(url):
-    #headers = {'user-agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0'}
     request = requests.get(url)
     response = request.json()
     return response 
@@ -34,7 +33,7 @@ def generate_excel_accumulate(data):
     #print(df_definitivo)
     dia = datetime.today().strftime('%d-%m-%Y')
     print('df_definitivo to excel copia')
-    df_definitivo.to_excel(f"./df_copia_seguridad{dia}.xlsx", index=False)
+    #df_definitivo.to_excel(f"./df_copia_seguridad{dia}.xlsx", index=False)
     print('df_definitivo to excel sobreescribir')
     df_definitivo.to_excel('./df_definitivo.xlsx', index=False)
     return df_definitivo

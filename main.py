@@ -9,11 +9,12 @@ import streamlit as st
 #from geopy.geocoders import Nominatim 
 from datetime import datetime
 from streamlit_folium import folium_static
-import folium
-from PIL import Image 
+
 URL = 'https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/'
 
 st.set_page_config(layout="wide")
+primaryColor="#de2007"
+backgroundColor="#f0e9e6"
 
 col1, col2, col3 = st.columns(3)
 col1.write("")
@@ -23,15 +24,17 @@ col3.write("")
 for i in range(5):
     st.write("")
 
-col1, col2 = st.columns([5,5])
+col1, col2 = st.columns([5,5,2])
 with col1:
     st.caption("## Welcome to the official gas station search engine.")
     st.caption("## Here you will find anything you want!") 
 with col2:
-    st.image('./images/gasolinera.jpeg',width=430)
+    st.image('./images/gasolinera_rtve.jpeg',width=530)
+#with col3:
+    #st.write("")
 
 
-for i in range(5):
+for i in range(3):
     st.write("")
 
 direccion_usuario=st.text_input("Please, enter your location here: (e.g. Calle Augusto Figueroa, 67, Madrid)") 
@@ -51,7 +54,7 @@ else:
         df_head = ana.mercator_gas(df_new, direccion_usuario)
         df_head = ana.colores(df_head)
         
-        col1, col2, col3 = st.columns([1,4,2])
+        #col1, col2, col3 = st.columns([1,4,2])
         with col1:
             st.write("")
         with col2:
@@ -67,25 +70,21 @@ else:
         with col1:
             st.write("")
         with col2:
-            st.write("todo es correcto")
+            if st.button('Predict!'):
+                run = 'yes'
+            else:
+                run = 'no'
+            
+        if run == 'no':
+            st.write('')
+        else: 
             graph=rep.prediction(df_definitivo)
-            st.write(graph,width=430)
+            st.write(graph,width=450)
         with col3:
             st.write("")
        
+
        
-       
-            
-        #if st.button('Predict!'):    
-            #run = 'yes'
-        #else:
-            #run = 'no'
-        
-        
-        #if run == 'no':
-            #st.write('')
-        #else:
-            #graph=rep.prediction(df_definitivo)
-            #st.write(graph)
+    
 
             
