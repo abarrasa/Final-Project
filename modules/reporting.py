@@ -19,6 +19,56 @@ import plotly.offline as py
 
 #df_acum = pd.read_excel("./df_copia_seguridad02-05-2022.xlsx")
 
+def ubi_gasolinera(df_new):
+    mapa_loop = folium.Map(location=[40.549986,-3.635939], zoom_start=13)
+    for i in range(0,len(df_new)):
+        html=f"""
+            <div style="font-family: times new roman; color: black">
+            <h><b> {df_new.iloc[i]['Rótulo']}</h></b>
+            <p><b>Prices:</b></p>
+                <li> Gasoline 95: {df_new.iloc[i]['Precio gasolina 95 E5']} €</li>
+                <li> Diesel: {df_new.iloc[i]['Precio gasóleo A']} €</li>
+            <p><b>Address:</b></p>
+            <p>{df_new.iloc[i]['Dirección'].title()}</p>
+            """
+        
+        iframe = folium.IFrame(html=html, width=180, height=215)
+        popup = folium.Popup(iframe, max_width=2650)
+        
+        if df_new.iloc[i]['Colores']== 'verde':
+            folium.Marker(
+                location=[df_new.iloc[i]['Latitud'],df_new.iloc[i]['Longitud']],
+                popup=popup,
+                icon=folium.Icon(color="green",  icon="ok-sign"),
+            ).add_to(mapa_loop)
+        elif df_new.iloc[i]['Colores']== 'amarillo':
+            folium.Marker(
+                location=[df_new.iloc[i]['Latitud'],df_new.iloc[i]['Longitud']],
+                popup=popup,
+                icon=folium.Icon(color="orange",  icon="ok-sign"),
+            ).add_to(mapa_loop)
+            
+        elif df_new.iloc[i]['Colores']== 'rojo':
+            folium.Marker(
+                location=[df_new.iloc[i]['Latitud'],df_new.iloc[i]['Longitud']],
+                popup=popup,
+                icon=folium.Icon(color="red",  icon="ok-sign"),
+            ).add_to(mapa_loop)
+    html=f"""
+        <div style="font-family: times new roman; color: black">
+        <h><b> You are currently here </b></h></div>
+        """
+    iframe = folium.IFrame(html=html, width=180, height=25)
+    popup = folium.Popup(iframe, max_width=2650)
+    folium.Marker(
+        location=[df_new.iloc[0]['Latitud_partida'],df_new.iloc[0]['Longitud_partida']],
+        popup=popup,
+        icon=folium.Icon(color="cadetblue",  icon="home"),
+).add_to(mapa_loop) 
+    mapa_loop.save('./modules/map.html')
+    return mapa_loop
+
+
 def prediction(df_acum):
     df_acum['Precio gasolina 95 E5'] = df_acum['Precio gasolina 95 E5'].apply(lambda x: x.replace(',','.'))
     df_acum.drop(df_acum.loc[df_acum['Precio gasolina 95 E5']=='No disponible'].index, inplace=True)

@@ -55,7 +55,7 @@ else:
         with col1:
             st.write("")
         with col2:
-            folium_static(ana.ubi_gasolinera(df_head))
+            folium_static(rep.ubi_gasolinera(df_head))
         with col3:
             st.write("")
         
