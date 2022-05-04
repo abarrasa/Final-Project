@@ -35,7 +35,7 @@ def generate_excel_accumulate(data):
     print('df_definitivo to excel copia')
     #df_definitivo.to_excel(f"./df_copia_seguridad{dia}.xlsx", index=False)
     print('df_definitivo to excel sobreescribir')
-    df_definitivo.to_excel('./df_definitivo.xlsx', index=False)
+    #df_definitivo.to_excel('./df_definitivo.xlsx', index=False)
     return df_definitivo
 
 

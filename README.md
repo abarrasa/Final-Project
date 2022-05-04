@@ -43,15 +43,15 @@ pip install streamlit
 
 **Step 3. Data Acquisition**
 
-To get the data from today´s prices from all the gas stations in Spain, we work with the rest API. To obtain the price history, there is an accumulated file with the prices from 04/04/2022 until today. Each time we run this code; the API data will get saved in the accumulated file. Here you can visit the web for the [API](https://sede.serviciosmin.gob.es/es-ES/datosabiertos/catalogo/precios-carburantes).
+To get the data from **today´s prices** from all the gas stations in Spain, we work with the rest API. To obtain the price history, there is an **accumulated file** with the prices from 04/04/2022 until today. Each time we run this code; the API data will get saved in the accumulated file. Here you can visit the web for the [API](https://sede.serviciosmin.gob.es/es-ES/datosabiertos/catalogo/precios-carburantes).
 
 **Step 4. Analysis**
 
-When you introduce your location in the Streamlit app, it will take the coordinates of the place and start working with them. Distance will be calculated, and it will get a final DataFrame with the 10 nearest gas stations ordered by distance from the current location. 
+Once the user introduces the location in the Streamlit app, it will take the coordinates of that place and start working with them. Distance will be calculated thanks to Geocoders library, and it will get a final DataFrame with the 10 nearest gas stations ordered by distance from the location introduced.
 
 **Step 5. Reporting**
 
-The result is a map, created by folium library with several markers which mean the following: 
+The result is a map, created with folium library with several markers which mean the following: 
     
     •Grey marker with the house: your current location
     •Color markers: gas stations
@@ -59,17 +59,19 @@ The result is a map, created by folium library with several markers which mean t
         ·Orange: Average price for all gas stations in Spain
         ·Green: Below the average price
 
-As a final step, a prediction for next week will be seen in a graphic made with library Prophet. Here you can observe the prices of the gasoline in Spain from April 4th until today, and the prediction for the next prices. In addition, a range of error is displayed.
+As a final step, a prediction for prices in the next week will be seen in a graphic made with Prophet library. The prices are calculated with the median number for all the gas stations in Spain for each day. Here you can observe the prices of the gasoline in Spain from April 4th until today, and the prediction for the next prices. In addition, a range of error is displayed.
 
 **Setting up the app**
 
-To run the app, execute this code in the terminal:
+To run the app, execute this code in the terminal and the browser will open. You have to enter the location you want and then click the “Search!” button.
 ````
 streamlit run main.py 
 ````
 
 **Roadmap**
-Later, if you want to add a filter for the user to select the type of fuel, as well as the number of liters of the car's tank. In this way we can estimate the total cost of filling the tank and show the user only the prices according to their needs.
+
+In the future, some releases will be made is to add a filter for the user to select the type of fuel, as well as the number of liters of the car's tank. In this way, it will be possible to estimate the total cost of filling the tank and show the user only the prices according to their needs.
+Another improvement to implement will be to estimate which day of the week is the cheapest and create a graph. 
 
 **Contributing**
 

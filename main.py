@@ -24,12 +24,12 @@ col3.write("")
 for i in range(5):
     st.write("")
 
-col1, col2 = st.columns([5,5,2])
+col1, col2 = st.columns([4,5])
 with col1:
-    st.caption("## Welcome to the official gas station search engine.")
-    st.caption("## Here you will find anything you want!") 
+    st.markdown("## Welcome to the official gas station search engine.")
+    st.markdown("## Here you will find anything you want!") 
 with col2:
-    st.image('./images/gasolinera_rtve.jpeg',width=530)
+    st.image('./images/gasolinera_rtve.jpeg',width=570)
 #with col3:
     #st.write("")
 
@@ -54,7 +54,7 @@ else:
         df_head = ana.mercator_gas(df_new, direccion_usuario)
         df_head = ana.colores(df_head)
         
-        #col1, col2, col3 = st.columns([1,4,2])
+        col1, col2, col3 = st.columns([1,4,2])
         with col1:
             st.write("")
         with col2:
@@ -70,18 +70,11 @@ else:
         with col1:
             st.write("")
         with col2:
-            if st.button('Predict!'):
-                run = 'yes'
-            else:
-                run = 'no'
-            
-        if run == 'no':
-            st.write('')
-        else: 
             graph=rep.prediction(df_definitivo)
-            st.write(graph,width=450)
+            st.write(graph,width=490)
         with col3:
-            st.write("")
+            st.write("")        
+
        
 
        
