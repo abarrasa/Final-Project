@@ -3,13 +3,12 @@
 # Ironhack Final-Project
 
 
-### :fuel_pump: **About** 
+### :fuelpump: **About** 
 
 This is the Data Analysis Bootcamp Final Project, where I have created an application which allows users to enter an address and find the nearest gas stations. In addition, they will be able to see their location and price from gasoline 95 and diesel.
 This project is made with the aim to cover all the tech we have studied along the bootcamp. Also, I have used some libraries I have not seen before such as Prophet and Streamlit.   
 
-
-### :file_folder: **Folder structure**
+<p align="center"><img src="https://media.giphy.com/media/3ohzdGGktYVpPRtgRy/giphy.gif"></p>
 
 
 ### **Step 1. Getting started**
@@ -50,7 +49,7 @@ To get the data from **today´s prices** from all the gas stations in Spain, we 
 
 Once the user introduces the location in the Streamlit app, it will take the coordinates of that place and start working with them. Distance will be calculated thanks to Geocoders library, and it will get a final DataFrame with the 10 nearest gas stations ordered by distance from the location introduced.
 
-### **Step 5. Reporting**
+### :chart_with_downwards_trends: **Step 5. Reporting**
 
 The result is a map, created with folium library with several markers which mean the following: 
     
