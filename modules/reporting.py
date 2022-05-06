@@ -1,23 +1,11 @@
-import osmnx as ox
 import pandas as pd
-import geocoder
 from geopy.geocoders import Nominatim
 import folium
-from folium.plugins import MarkerCluster
-import streamlit as st
-from streamlit_folium import folium_static
-import matplotlib.pyplot as plt 
 import datetime
 import warnings
 warnings.filterwarnings('ignore')
 from prophet import Prophet
-from fbprophet.plot import plot_plotly
-import plotly.offline as py
 
-
-#st.title('prediction')
-
-#df_acum = pd.read_excel("./df_copia_seguridad02-05-2022.xlsx")
 
 def ubi_gasolinera(df_new):
     mapa_loop = folium.Map(location=[40.549986,-3.635939], zoom_start=13)
@@ -65,7 +53,7 @@ def ubi_gasolinera(df_new):
         popup=popup,
         icon=folium.Icon(color="cadetblue",  icon="home"),
 ).add_to(mapa_loop) 
-    mapa_loop.save('./modules/map.html')
+    mapa_loop.save('./images/map.html')
     return mapa_loop
 
 
@@ -84,9 +72,6 @@ def prediction(df_acum):
     predict= my_model.predict(future)
     predict[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].tail(9)
     graph = my_model.plot(predict, uncertainty=True)
-    graph.savefig("prediction_prophet.jpg")
+    graph.savefig("./images/prediction_prophet.jpg")
     my_model.plot_components(predict)
     return graph
-
-#graph=prediction(df_acum)
-#st.write(graph)

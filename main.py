@@ -3,18 +3,13 @@ from modules import reporting as rep
 from modules import Analysis as ana
 import warnings
 warnings.filterwarnings('ignore')
-#from openpyxl.workbook import Workbook
 import pandas as pd
 import streamlit as st
-#from geopy.geocoders import Nominatim 
-from datetime import datetime
 from streamlit_folium import folium_static
 
 URL = 'https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/'
 
 st.set_page_config(layout="wide")
-primaryColor="#de2007"
-backgroundColor="#f0e9e6"
 
 col1, col2, col3 = st.columns(3)
 col1.write("")
@@ -30,8 +25,7 @@ with col1:
     st.markdown("## Here you will find anything you want!") 
 with col2:
     st.image('./images/gasolinera_rtve.jpeg',width=570)
-#with col3:
-    #st.write("")
+
 
 
 for i in range(3):
@@ -47,7 +41,6 @@ if run == 'no':
         st.write('')
 else:
     if __name__ == '__main__':
-        #st.info("Searching...")
         data = acq.api(URL)
         df_new = acq.generate_excel_today(data)
         df_definitivo = acq.generate_excel_accumulate(data)

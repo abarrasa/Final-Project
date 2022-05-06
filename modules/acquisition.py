@@ -1,7 +1,6 @@
 import pandas as pd
 import requests
 from datetime import datetime 
-#from openpyxl.workbook import Workbook
 URL = 'https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/'
 
 
@@ -19,31 +18,23 @@ def generate_excel_today(data):
     df_new = df_new.replace('', 'No disponible')
     dia_hoy=datetime.today().strftime('%d-%m-%Y')
     print('Generando df_new')
-    df_new.to_excel(f"./df_diario {dia_hoy}.xlsx", index=False)
+    df_new.to_excel(f"./data/df_diario {dia_hoy}.xlsx", index=False)
     return df_new 
 
 def generate_excel_accumulate(data):
-    df_acum= pd.read_excel('./df_definitivo.xlsx')
+    df_acum= pd.read_excel('./data/df_definitivo.xlsx')
     df_new = generate_excel_today(data)
-    #union=[df_acum, df_new]
-    print('Concant df_new y df_acum')
+    print('Concat df_new y df_acum')
     df_union=pd.concat([df_acum, df_new])
     print('creando df_definitivo')
     df_definitivo = pd.DataFrame(df_union.values, columns=df_new.columns)
-    #print(df_definitivo)
     dia = datetime.today().strftime('%d-%m-%Y')
-    print('df_definitivo to excel copia')
-    #df_definitivo.to_excel(f"./df_copia_seguridad{dia}.xlsx", index=False)
-    print('df_definitivo to excel sobreescribir')
-    #df_definitivo.to_excel('./df_definitivo.xlsx', index=False)
+    print('Generando copia de seguridad')
+    df_definitivo.to_excel(f"./data/df_copia_seguridad{dia}.xlsx", index=False)
+    print('Generando df_definitivo')
+    df_definitivo.to_excel('./data/df_definitivo.xlsx', index=False)
     return df_definitivo
 
-
-#data = api(URL)
-#df_new = generate_excel_today(data)
-#print('todo ok')
-#df_definitivo = generate_excel_accumulate(data)
-#re print('excel creado')
 
 
    
